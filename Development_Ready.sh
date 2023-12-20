@@ -1,8 +1,8 @@
 #!/bin/bash
 
 set -xe
-mail="murat.tunc8558@gmail.com"
-git_user_name="Murat Tunc"
+mail="xxx@mail.com"
+git_user_name="xxx"
 apt update -y
 apt-get upgrade -y
 apt install curl -y
@@ -14,11 +14,11 @@ git config --global user.name "${git_user_name}"
 git config --global user.email "${mail}"
 
 #Personal access token
-git_api_token="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"
+git_api_token="github_pat_xxx"
 
 #Use the HTTPS to push a ssh key to git, SSH for pull/push configuration
-gitrepo_ssh="git@github.com:MuratTunc/auto_bundle_update.git"
-gitrepo_https="https://github.com/MuratTunc/auto_bundle_update"
+gitrepo_ssh="git@github.com:xxx/xxx.git"
+gitrepo_https="https://github.com/xxx/xxx"
 
 #Generating SSH key:
 ssh-keygen -f "${HOME}/.ssh/id_rsa" -t rsa -b 4096 -C "${mail}" -N ''
