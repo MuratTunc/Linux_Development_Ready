@@ -3,6 +3,7 @@
 set -xe
 mail="xxx@mail.com"
 git_user_name="xxx"
+##----------------------update and upgrade---------------------------------------##
 apt update -y
 apt-get upgrade -y
 apt install curl -y
@@ -13,7 +14,7 @@ apt install git -y
 git config --global user.name "${git_user_name}"
 git config --global user.email "${mail}"
 
-#Personal access token
+#You should enter your access token to here.
 git_api_token="github_pat_xxx"
 
 #Use the HTTPS to push a ssh key to git, SSH for pull/push configuration
@@ -46,17 +47,17 @@ cd /usr/local/
 sudo tar -C /usr/local/ -xzf go1.21.5.linux-amd64.tar.gz
 
 
-#Add the path /usr/local/go/bin to the $PATH environment variable. Define the PATH variable in the $HOME/.profile file. You must need to restart your terminal for changes to apply.
+#Add the path /usr/local/go/bin to the $PATH environment variable.
+echo -e "\n# path added by my personal installer" >> ~/.profile
+echo "[ -d /usr/local/go/bin ] && PATH=\"/usr/local/go/bin:\$PATH\"" >> ~/.profile
+source ~/.profile
 
-if [ -d "/usr/local/go/bin" ] ; then
-    PATH=$PATH:/usr/local/go/bin
-fi
 
-#If you are using bash, then you must also define the PATH variable in $HOME/.bashrc file, along with defining the PATH variable in the $HOME/.profile file.
-
-if [ -d "/usr/local/go/bin" ] ; then
-    PATH=$PATH:/usr/local/go/bin
-fi
+##-------------------------------------------------------------------------------##
+#install postgreSQL
+sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+apt-get install postgresql
 
 go version
 
