@@ -7,7 +7,7 @@ The aim of this study is to make Debian base Linux operating system environments
 > - Vs Code
 > - Golang
 > - Postgres
-> - Gcc
+>   
 
 ## Using steps
 ### 1 Download Linux_Development_Ready repository.
