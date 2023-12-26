@@ -1,2 +1,17 @@
 # Linux_Development_Ready
-Using Development_Ready_Set_up script will make easy to start native linux OS.
+The aim of this study is to make Debian base Linux operating system environments ready for software design.
+> #### So which software packages will be installed on the PC?
+>
+> - Git
+> - Gcc
+> - Vs Code
+> - Golang
+> - Postgres
+> - Gcc
+
+## Using steps
+### 1 Download Linux_Development_Ready repository.
+### 2 Go into  Linux_Development_Ready directory.
+### 3 Type this command from your terminal
+####  sudo ./Development_Ready.sh
+
