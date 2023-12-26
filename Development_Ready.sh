@@ -47,10 +47,14 @@ sudo mv go1.21.5.linux-amd64.tar.gz /usr/local/
 cd /usr/local/
 sudo tar -C /usr/local/ -xzf ${go_version}
 
-
 #Add the path /usr/local/go/bin to the $PATH environment variable.
 echo -e "\n# path added by my personal installer" >> ~/.profile
 echo "[ -d /usr/local/go/bin ] && PATH=\"/usr/local/go/bin:\$PATH\"" >> ~/.profile
+source ~/.profile
+
+#Add the path /usr/local/go/bin to the $PATH environment variable.
+echo -e "\n# path added by my personal installer" >> ~/.profile
+echo "[ -d /usr/local/go/bin ] && PATH=\"/usr/local/go/bin:\$PATH\"" >> ~/.bashrc
 source ~/.profile
 
 
