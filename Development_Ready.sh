@@ -39,12 +39,13 @@ curl -H "Authorization: token ${git_api_token}" -H "Content-Type: application/js
 
 ##-------------------------------------------------------------------------------##
 # install golang
+go_version="go1.21.5.linux-amd64.tar.gz"
 sudo rm -rf /usr/local/go
 cd Downloads/
-wget https://dl.google.com/go/go1.21.5.linux-amd64.tar.gz 
+wget https://dl.google.com/go/${go_version}
 sudo mv go1.21.5.linux-amd64.tar.gz /usr/local/
 cd /usr/local/
-sudo tar -C /usr/local/ -xzf go1.21.5.linux-amd64.tar.gz
+sudo tar -C /usr/local/ -xzf ${go_version}
 
 
 #Add the path /usr/local/go/bin to the $PATH environment variable.
