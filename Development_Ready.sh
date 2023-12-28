@@ -1,26 +1,36 @@
 #!/bin/bash
 
 set -xe
-
-# Color variables
+slp=2 #sleep constant in sceconds
+##-------------------------------------------------------------------------------##
+#Color variables.
 red='\033[0;31m'
 green='\033[0;32m'
 yellow='\033[0;33m'
 blue='\033[0;34m'
 magenta='\033[0;35m'
 cyan='\033[0;36m'
-# Clear the color after that
 clear='\033[0m'
 
 mail="xxx@mail.com"
 git_user_name="xxx"
-##----------------------update and upgrade---------------------------------------##
-apt update -y
-apt-get upgrade -y
-apt install curl -y
-apt install build-essential -y
-##-------------------------------------------------------------------------------##
 
+##-------------------------------------------------------------------------------##
+#update-upgrade.
+echo -e "-->Status:Updating and Upgraiding system... ${blue}blue${clear}!"
+apt update -y
+sleep $slp
+apt-get upgrade -y
+echo -e "-->Status:Install curl... ${blue}blue${clear}!"
+sleep $slp
+apt install curl -y
+echo -e "-->Status:essential... ${blue}blue${clear}!"
+sleep $slp
+apt install build-essential -y
+
+##-------------------------------------------------------------------------------##
+echo -e "-->Status:install git... ${blue}blue${clear}!"
+sleep $slp
 apt install git -y
 git config --global user.name "${git_user_name}"
 git config --global user.email "${mail}"
@@ -41,36 +51,48 @@ ssh-add ~/.ssh/id_rsa
 
 #git API path for posting a new ssh-key:
 git_api_addkey="https://api.$(echo ${gitrepo_https} |cut -d'/' -f3)/user/keys"
-
-#lets name the ssh-key in get after the hostname with a timestamp:
 git_ssl_keyname="$(hostname)_$(date +%d-%m-%Y)"
 
-#Finally lets post this ssh key:
+echo -e "-->Status:post ssh key... ${blue}blue${clear}!"
 curl -H "Authorization: token ${git_api_token}" -H "Content-Type: application/json" -X POST -d "{\"title\":\"${git_ssl_keyname}\",\"key\":\"${sslpub}\"}" ${git_api_addkey}
 
 ##-------------------------------------------------------------------------------##
-# install golang
+echo -e "-->Status:installing golang... ${blue}blue${clear}!"
+sleep $slp
 go_version="go1.21.5.linux-amd64.tar.gz"
 sudo rm -rf /usr/local/go
 cd Downloads/
+echo -e "-->Status:Downloading go version ${go_version}... ${blue}blue${clear}!"
 wget https://dl.google.com/go/${go_version}
 sudo mv go1.21.5.linux-amd64.tar.gz /usr/local/
 cd /usr/local/
+echo -e "-->Status:untar downloaded file... ${go_version}... ${blue}blue${clear}!"
+sleep $slp
 sudo tar -C /usr/local/ -xzf ${go_version}
 
+##-------------------------------------------------------------------------------##
 #Add the path /usr/local/go/bin to the $PATH environment variable.
+echo -e "-->Status:EXORT PATH variable to profile... ${go_version}... ${blue}blue${clear}!"
+sleep $slp
 echo -e "\n# path added by my personal installer" >> ~/.profile
 echo "[ -d /usr/local/go/bin ] && PATH=\"/usr/local/go/bin:\$PATH\"" >> ~/.profile
 source ~/.profile
 
+##-------------------------------------------------------------------------------##
 #Add the path /usr/local/go/bin to the $PATH environment variable.
+echo -e "-->Status:EXORT PATH variable to bashrc... ${go_version}... ${blue}blue${clear}!"
+sleep $slp
 echo -e "\n# path added by my personal installer" >> ~/.profile
 echo "[ -d /usr/local/go/bin ] && PATH=\"/usr/local/go/bin:\$PATH\"" >> ~/.bashrc
-source ~/.profile
-
+source ~/.bashrc
 
 ##-------------------------------------------------------------------------------##
 #install postgreSQL
+echo -e "-->Status:installing postgres... ${blue}blue${clear}!"
+sleep $slp
 sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 apt-get install postgresql
+
+##-------------------------------------------------------------------------------##
+echo -e "-->Status:Process ENDED !... ${green}blue${clear}!"
