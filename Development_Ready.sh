@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -xe
-slp=2 #sleep constant in sceconds
+slp=1 #sleep constant in sceconds
 ##-------------------------------------------------------------------------------##
 #Color variables.
 red='\033[0;31m'
