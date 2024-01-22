@@ -2,7 +2,7 @@
 
 ##-------------------------------------------------------------------------------##
 set -xe
-slp=1 #sleep constant in sceconds
+slp=2 #sleep constant in sceconds
 ##-------------------------------------------------------------------------------##
 #Color variables.
 red='\033[0;31m'
@@ -34,6 +34,7 @@ sleep ${slp}
 apt install git -y
 git config --global user.name "${git_user_name}"
 git config --global user.email "${mail}"
+sleep ${slp}
 
 #You should enter your access token to here.
 git_api_token="github_pat_xxx"
@@ -45,9 +46,11 @@ gitrepo_https="https://github.com/xxx/xxx"
 #Generating SSH key:
 ssh-keygen -f "${HOME}/.ssh/id_rsa" -t rsa -b 4096 -C "${mail}" -N ''
 sslpub="$(cat ${HOME}/.ssh/id_rsa.pub |tail -1)"
-
+sleep ${slp}
 eval `ssh-agent`
+sleep ${slp}
 ssh-add ~/.ssh/id_rsa
+sleep ${slp}
 
 #git API path for posting a new ssh-key:
 git_api_addkey="https://api.$(echo ${gitrepo_https} |cut -d'/' -f3)/user/keys"
@@ -55,6 +58,7 @@ git_ssl_keyname="$(hostname)_$(date +%d-%m-%Y)"
 
 echo -e "${blue}-->Status:post ssh key... ${blue}${clear}!"
 curl -H "Authorization: token ${git_api_token}" -H "Content-Type: application/json" -X POST -d "{\"title\":\"${git_ssl_keyname}\",\"key\":\"${sslpub}\"}" ${git_api_addkey}
+sleep ${slp}
 
 ##-------------------------------------------------------------------------------##
 echo -e "${blue}-->Status:installing golang... ${clear}!"
@@ -64,11 +68,14 @@ sudo rm -rf /usr/local/go
 cd Downloads/
 echo -e "${blue}-->Status:Downloading go version ${go_version}... ${clear}!"
 wget https://dl.google.com/go/${go_version}
+sleep ${slp}
 sudo mv go1.21.5.linux-amd64.tar.gz /usr/local/
 cd /usr/local/
 echo -e "${blue}-->Status:untar downloaded file... ${go_version}... ${clear}!"
 sleep ${slp}
 sudo tar -C /usr/local/ -xzf ${go_version}
+sleep ${slp}
+
 
 ##-------------------------------------------------------------------------------##
 #Add the path /usr/local/go/bin to the $PATH environment variable.
@@ -77,6 +84,7 @@ sleep ${slp}
 echo -e "\n# path added by my personal installer" >> ~/.profile
 echo "[ -d /usr/local/go/bin ] && PATH=\"/usr/local/go/bin:\$PATH\"" >> ~/.profile
 source ~/.profile
+sleep ${slp}
 
 ##-------------------------------------------------------------------------------##
 #Add the path /usr/local/go/bin to the $PATH environment variable.
@@ -85,13 +93,15 @@ sleep ${slp}
 echo -e "\n# path added by my personal installer" >> ~/.profile
 echo "[ -d /usr/local/go/bin ] && PATH=\"/usr/local/go/bin:\$PATH\"" >> ~/.bashrc
 source ~/.bashrc
+sleep ${slp}
 
 ##-------------------------------------------------------------------------------##
 #install postgreSQL
 echo -e "${blue}-->Status:installing postgres... ${clear}!"
 sleep ${slp}
 sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+sleep ${slp}
 apt-get install postgresql -y
 
 ##-------------------------------------------------------------------------------##
