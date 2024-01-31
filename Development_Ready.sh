@@ -64,16 +64,16 @@ sleep ${slp}
 echo -e "${blue}-->Status:installing golang... ${clear}!"
 sleep ${slp}
 go_version="go1.21.5.linux-amd64.tar.gz"
-sudo rm -rf /usr/local/go
+rm -rf /usr/local/go
 cd Downloads/
 echo -e "${blue}-->Status:Downloading go version ${go_version}... ${clear}!"
 wget https://dl.google.com/go/${go_version}
 sleep ${slp}
-sudo mv go1.21.5.linux-amd64.tar.gz /usr/local/
+mv go1.21.5.linux-amd64.tar.gz /usr/local/
 cd /usr/local/
 echo -e "${blue}-->Status:untar downloaded file... ${go_version}... ${clear}!"
 sleep ${slp}
-sudo tar -C /usr/local/ -xzf ${go_version}
+tar -C /usr/local/ -xzf ${go_version}
 sleep ${slp}
 
 
