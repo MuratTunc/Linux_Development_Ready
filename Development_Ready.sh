@@ -63,11 +63,17 @@ sleep ${slp}
 ##-------------------------------------------------------------------------------##
 echo -e "${blue}-->Status:installing golang... ${clear}!"
 sleep ${slp}
-go_version="go1.21.5.linux-amd64.tar.gz"
 rm -rf /usr/local/go
 cd Downloads/
 echo -e "${blue}-->Status:Downloading go version ${go_version}... ${clear}!"
+
+http_response=$(GET https://go.dev/dl/)
+extracted_response=$(echo "$http_response" | grep -o -P '(?<=class="download downloadBox" href=).*?(?=>)')
+go_version_full=$(echo "$extracted_response" | grep "linux" )
+len=${#go_version_full}
+go_version=${go_version_full:5:len-6}
 wget https://dl.google.com/go/${go_version}
+
 sleep ${slp}
 mv go1.21.5.linux-amd64.tar.gz /usr/local/
 cd /usr/local/
