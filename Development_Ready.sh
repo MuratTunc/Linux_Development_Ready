@@ -64,7 +64,6 @@ sleep ${slp}
 echo -e "${blue}-->Status:installing golang... ${clear}!"
 sleep ${slp}
 rm -rf /usr/local/go
-cd Downloads/
 echo -e "${blue}-->Status:Downloading go version ${go_version}... ${clear}!"
 
 http_response=$(GET https://go.dev/dl/)
@@ -75,13 +74,12 @@ go_version=${go_version_full:5:len-6}
 wget https://dl.google.com/go/${go_version}
 
 sleep ${slp}
-mv go1.21.5.linux-amd64.tar.gz /usr/local/
+mv ${go_version} /usr/local/
 cd /usr/local/
 echo -e "${blue}-->Status:untar downloaded file... ${go_version}... ${clear}!"
 sleep ${slp}
 tar -C /usr/local/ -xzf ${go_version}
 sleep ${slp}
-
 
 ##-------------------------------------------------------------------------------##
 #Add the path /usr/local/go/bin to the $PATH environment variable.
