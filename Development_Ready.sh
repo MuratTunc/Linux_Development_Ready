@@ -16,20 +16,23 @@ clear='\033[0m'
 mail="xxx@mail.com"
 git_user_name="xxx"
 
+# Clear the screen
+clear
+
 ##-------------------------------------------------------------------------------##
 #update-upgrade.
-echo -e "${blue}-->Status:Updating and Upgraiding system... ${clear}!"
+echo -e "${green}-->Status:Updating and Upgraiding system... ${clear}!"
 apt update -y
 sleep ${slp}
-echo -e "${blue}-->Status:Install curl... ${clear}!"
+echo -e "${green}-->Status:Install curl... ${clear}!"
 sleep ${slp}
 apt install curl -y
-echo -e "${blue}-->Status:essential... ${clear}!"
+echo -e "${green}-->Status:essential... ${clear}!"
 sleep ${slp}
 apt install build-essential -y
 
 ##-------------------------------------------------------------------------------##
-echo -e "${blue}-->Status:install git... ${clear}!"
+echo -e "${green}-->Status:install git... ${clear}!"
 sleep ${slp}
 apt install git -y
 git config --global user.name "${git_user_name}"
@@ -56,15 +59,15 @@ sleep ${slp}
 git_api_addkey="https://api.$(echo ${gitrepo_https} |cut -d'/' -f3)/user/keys"
 git_ssl_keyname="$(hostname)_$(date +%d-%m-%Y)"
 
-echo -e "${blue}-->Status:post ssh key... ${blue}${clear}!"
+echo -e "${green}-->Status:post ssh key... ${green}${clear}!"
 curl -H "Authorization: token ${git_api_token}" -H "Content-Type: application/json" -X POST -d "{\"title\":\"${git_ssl_keyname}\",\"key\":\"${sslpub}\"}" ${git_api_addkey}
 sleep ${slp}
 
 ##-------------------------------------------------------------------------------##
-echo -e "${blue}-->Status:installing golang... ${clear}!"
+echo -e "${green}-->Status:installing golang... ${clear}!"
 sleep ${slp}
 rm -rf /usr/local/go
-echo -e "${blue}-->Status:Downloading go version ${go_version}... ${clear}!"
+echo -e "${green}-->Status:Downloading go version ${go_version}... ${clear}!"
 
 http_response=$(GET https://go.dev/dl/)
 extracted_response=$(echo "$http_response" | grep -o -P '(?<=class="download downloadBox" href=).*?(?=>)')
@@ -76,23 +79,21 @@ wget https://dl.google.com/go/${go_version}
 sleep ${slp}
 mv ${go_version} /usr/local/
 cd /usr/local/
-echo -e "${blue}-->Status:untar downloaded file... ${go_version}... ${clear}!"
+echo -e "${green}-->Status:untar downloaded file... ${go_version}... ${clear}!"
 sleep ${slp}
 tar -C /usr/local/ -xzf ${go_version}
 sleep ${slp}
 
-##-------------------------------------------------------------------------------##
-#Add the path /usr/local/go/bin to the $PATH environment variable.
-echo -e "${blue}-->Status:EXORT PATH variable to profile... ${go_version}... ${clear}!"
+#Add the path /usr/local/go/bin to the $PATH environment variable.(profile)
+echo -e "${green}-->Status:EXORT PATH variable to profile... ${go_version}... ${clear}!"
 sleep ${slp}
 echo -e "\n# path added by my personal installer" >> ~/.profile
 echo "[ -d /usr/local/go/bin ] && PATH=\"/usr/local/go/bin:\$PATH\"" >> ~/.profile
 source ~/.profile
 sleep ${slp}
 
-##-------------------------------------------------------------------------------##
-#Add the path /usr/local/go/bin to the $PATH environment variable.
-echo -e "${blue}-->Status:EXORT PATH variable to bashrc... ${go_version}... ${clear}!"
+#Add the path /usr/local/go/bin to the $PATH environment variable.(bashrc)
+echo -e "${green}-->Status:EXORT PATH variable to bashrc... ${go_version}... ${clear}!"
 sleep ${slp}
 echo -e "\n# path added by my personal installer" >> ~/.profile
 echo "[ -d /usr/local/go/bin ] && PATH=\"/usr/local/go/bin:\$PATH\"" >> ~/.bashrc
@@ -101,7 +102,7 @@ sleep ${slp}
 
 ##-------------------------------------------------------------------------------##
 #install postgreSQL
-echo -e "${blue}-->Status:installing postgres... ${clear}!"
+echo -e "${green}-->Status:installing postgres... ${clear}!"
 sleep ${slp}
 sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
