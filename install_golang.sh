@@ -14,8 +14,7 @@ clear='\033[0m'
 ##-------------------------------------------------------------------------------##
 # Clear the screen
 clear
-echo -e "${green}-->Status:installing golang... ${clear}!"
-sleep ${slp}
+echo -e "${green}-->Status:Remove old files from /usr/local... ${clear}!"
 rm -rf /usr/local/go
 echo -e "${green}-->Status:Downloading go version ${go_version}... ${clear}!"
 
@@ -38,10 +37,9 @@ sleep ${slp}
 
 echo -e "${blue}-->Status:EXPORT PATH variable to profile... ${go_version}... ${clear}!"
 sleep ${slp}
-echo -e "\n# Path added by my personal installer" >> ~/.profile
-echo "[ -d /usr/local/go/bin ] && PATH=\"/usr/local/go/bin:\$PATH\"" >> ~/.profile
+echo 'PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
 sleep ${slp}
-source ~/.profile
+source ~/.bashrc
 sleep ${slp}
 echo -e "${green}-->go version... ${clear}!"
 go version
