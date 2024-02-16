@@ -1,5 +1,0 @@
-myscript2
-myscript3
-myscript4
-PATH=$PATH:/usr/local/go/bin
-PATH=$PATH:/usr/local/go/bin
