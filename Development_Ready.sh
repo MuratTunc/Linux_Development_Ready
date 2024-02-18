@@ -1,7 +1,5 @@
 #!/bin/bash
 
-##-------------------------------------------------------------------------------##
-set -xe
 slp=2 #sleep constant in seconds
 ##-------------------------------------------------------------------------------##
 #Color variables.
@@ -23,7 +21,6 @@ initialize() {
 
 updatesystem() {
     ##-------------------------------------------------------------------------------##
-    #update-upgrade.
     echo -e "${green}-->Status:Updating and Upgraiding system... ${clear}!"
     apt update -y
     sleep ${slp}
@@ -33,7 +30,6 @@ updatesystem() {
     echo -e "${green}-->Status:essential... ${clear}!"
     sleep ${slp}
     apt install build-essential -y
-    ##-------------------------------------------------------------------------------##
 }
 
 installGoLang() {
@@ -76,8 +72,6 @@ installGoLang() {
     source ~/.profile
     sleep ${slp}
     echo -e "${green}-->go version...$(go version) ${clear}!"
-    ##-------------------------------------------------------------------------------##
-
 }
 
 installgit() {
@@ -112,8 +106,6 @@ installgit() {
     echo -e "${green}-->Status:post ssh key... ${green}${clear}!"
     curl -H "Authorization: token ${git_api_token}" -H "Content-Type: application/json" -X POST -d "{\"title\":\"${git_ssl_keyname}\",\"key\":\"${sslpub}\"}" ${git_api_addkey}
     sleep ${slp}
-
-    ##-------------------------------------------------------------------------------##
 }
 
 installPostgresgl() {
@@ -125,20 +117,19 @@ installPostgresgl() {
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
     sleep ${slp}
     apt-get install postgresql -y
-
-    ##-------------------------------------------------------------------------------##
 }
 
 processEnd() {
     echo -e "${green}-->Status:Process ENDED !... ${clear}!"
 }
 
+initialize()
 updatesystem()
 installgit()
 installGoLang()
 installPostgresgl()
 processEnd()
-initialize()
+
 
 
 
