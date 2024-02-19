@@ -1,0 +1,4 @@
+mail=""
+git_user_name=""
+git_api_token="github_pat_..."
+git_repo_https=""

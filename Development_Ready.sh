@@ -11,16 +11,23 @@ magenta='\033[0;35m'
 cyan='\033[0;36m'
 clear='\033[0m'
 
-mail="xxx@mail.com"
-git_user_name="xxx"
+readUserConfigFileParameters() {
+
+    source config.txt
+    echo -e "${green}-->Status:User Input Parameters... ${clear}!"
+    echo -e "${green}-->Status:mail=$mail ... ${clear}!"
+    echo -e "${green}-->Status:git_user_name=$git_user_name ... ${clear}!"
+    echo -e "${green}-->Status:git_api_token=$git_api_token ... ${clear}!"
+    echo -e "${green}-->Status:git_repo_https=$git_repo_https ... ${clear}!"
+    
+}
 
 initialize() {
-    # Clear the screen
     clear
 }
 
 updatesystem() {
-    ##-------------------------------------------------------------------------------##
+
     echo -e "${green}-->Status:Updating and Upgraiding system... ${clear}!"
     apt update -y
     sleep ${slp}
@@ -33,8 +40,7 @@ updatesystem() {
 }
 
 installGoLang() {
-    ##-------------------------------------------------------------------------------##
-   
+    
     echo -e "${green}-->Status:Getting latest go version tar file from web source...${clear}!"
     http_response=$(GET https://go.dev/dl/)
     extracted_response=$(echo "$http_response" | grep -o -P '(?<=class="download downloadBox" href=).*?(?=>)')
@@ -53,7 +59,6 @@ installGoLang() {
     wget https://dl.google.com/go/${go_version}
     ##-------------------------------------------------------------------------------##
 
-    ##-------------------------------------------------------------------------------##
     sleep ${slp}
     mv ${go_version} /usr/local/
     cd /usr/local/
@@ -63,7 +68,6 @@ installGoLang() {
     sleep ${slp}
     ##-------------------------------------------------------------------------------##
 
-    ##-------------------------------------------------------------------------------##
     #Add the path /usr/local/go/bin to the $PATH environment variable.(profile)
     echo -e "${green}-->Status:EXPORT PATH variable to profile... ${go_version}... ${clear}!"
     sleep ${slp}
@@ -75,20 +79,13 @@ installGoLang() {
 }
 
 installgit() {
-    ##-------------------------------------------------------------------------------##
+    
     echo -e "${green}-->Status:install git... ${clear}!"
     sleep ${slp}
     apt install git -y
     git config --global user.name "${git_user_name}"
     git config --global user.email "${mail}"
     sleep ${slp}
-
-    #You should enter your access token to here.
-    git_api_token="github_pat_xxx"
-
-    #Use the HTTPS to push a ssh key to git, SSH for pull/push configuration
-    gitrepo_ssh="git@github.com:xxx/xxx.git"
-    gitrepo_https="https://github.com/xxx/xxx"
 
     #Generating SSH key:
     ssh-keygen -f "${HOME}/.ssh/id_rsa" -t rsa -b 4096 -C "${mail}" -N ''
@@ -100,7 +97,7 @@ installgit() {
     sleep ${slp}
 
     #git API path for posting a new ssh-key:
-    git_api_addkey="https://api.$(echo ${gitrepo_https} |cut -d'/' -f3)/user/keys"
+    git_api_addkey="https://api.$(echo ${git_repo_https} |cut -d'/' -f3)/user/keys"
     git_ssl_keyname="$(hostname)_$(date +%d-%m-%Y)"
 
     echo -e "${green}-->Status:post ssh key... ${green}${clear}!"
@@ -109,8 +106,7 @@ installgit() {
 }
 
 installPostgresgl() {
-    ##-------------------------------------------------------------------------------##
-    #install postgreSQL
+
     echo -e "${green}-->Status:installing postgres... ${clear}!"
     sleep ${slp}
     sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
@@ -123,12 +119,13 @@ processEnd() {
     echo -e "${green}-->Status:Process ENDED !... ${clear}!"
 }
 
-initialize()
-updatesystem()
-installgit()
-installGoLang()
-installPostgresgl()
-processEnd()
+initialize
+readUserConfigFileParameters
+updatesystem
+installgit
+installGoLang
+installPostgresgl
+processEnd
 
 
 
