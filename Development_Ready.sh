@@ -39,6 +39,16 @@ updatesystem() {
     apt install build-essential -y
 }
 
+installVSCode() {
+    echo -e "${green}-->Status:Installing VS Code...${clear}!"
+    wget https://code.visualstudio.com/docs/?dv=linux64_deb
+    sleep ${slp}
+    dpkg -i visualstudiofilename.deb
+    sleep ${slp}
+    apt-get install -f
+}
+
+
 installGoLang() {
     
     echo -e "${green}-->Status:Getting latest go version tar file from web source...${clear}!"
@@ -122,11 +132,10 @@ processEnd() {
 initialize
 readUserConfigFileParameters
 updatesystem
+installVSCode
 installgit
 installGoLang
 installPostgresgl
 processEnd
-
-
 
 
