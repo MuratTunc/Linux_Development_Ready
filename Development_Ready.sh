@@ -41,13 +41,17 @@ updatesystem() {
 
 installVSCode() {
     echo -e "${green}-->Status:Installing VS Code...${clear}!"
-    wget https://code.visualstudio.com/docs/?dv=linux64_deb
+    http_response=$(GET https://packages.microsoft.com/repos/vscode/pool/main/c/code/)
+    latest_line=$(echo ${http_response//*a href=})
+    vslatest_deb_package=$(grep -oP '(?<=>).*?(?=</a)' <<< "$latest_line")
+    echo -e "${green}-->Status:Downloading latest VS CODE DEB PACKAGE $vslatest_deb_package...${clear}!"
+    wget https://packages.microsoft.com/repos/vscode/pool/main/c/code/$vslatest_deb_package
     sleep ${slp}
-    dpkg -i visualstudiofilename.deb
+    echo -e "${green}-->Status:Installing VS Code...${clear}!"
+    dpkg -i $vslatest_deb_package
     sleep ${slp}
     apt-get install -f
 }
-
 
 installGoLang() {
     
@@ -106,13 +110,6 @@ installgit() {
     ssh-add ~/.ssh/id_rsa
     sleep ${slp}
 
-    #git API path for posting a new ssh-key:
-    git_api_addkey="https://api.$(echo ${git_repo_https} |cut -d'/' -f3)/user/keys"
-    git_ssl_keyname="$(hostname)_$(date +%d-%m-%Y)"
-
-    echo -e "${green}-->Status:post ssh key... ${green}${clear}!"
-    curl -H "Authorization: token ${git_api_token}" -H "Content-Type: application/json" -X POST -d "{\"title\":\"${git_ssl_keyname}\",\"key\":\"${sslpub}\"}" ${git_api_addkey}
-    sleep ${slp}
 }
 
 installPostgresgl() {
