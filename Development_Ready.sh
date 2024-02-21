@@ -28,7 +28,7 @@ initialize() {
 
 updatesystem() {
 
-    echo -e "${green}-->Status:Updating and Upgraiding system... ${clear}!"
+    echo -e "${green}-->Status:Updating and linux system... ${clear}!"
     apt update -y
     sleep ${slp}
     echo -e "${green}-->Status:Install curl... ${clear}!"
@@ -51,10 +51,31 @@ installVSCode() {
     dpkg -i $vslatest_deb_package
     sleep ${slp}
     apt-get install -f
+    sleep ${slp}
+    rm -rf $vslatest_deb_package
+
+}
+
+installGit() {
+    echo -e "${green}-->Status:Installing git ... ${clear}!"
+    sleep ${slp}
+    apt install git -y
+    git config --global user.name "${git_user_name}"
+    git config --global user.email "${mail}"
+    sleep ${slp}
+
+    #Generating SSH key
+    ssh-keygen -f "${HOME}/.ssh/id_rsa" -t rsa -b 4096 -C "${mail}" -N ''
+    sslpub="$(cat ${HOME}/.ssh/id_rsa.pub |tail -1)"
+    sleep ${slp}
+    eval `ssh-agent`
+    sleep ${slp}
+    ssh-add ~/.ssh/id_rsa
+    sleep ${slp}
 }
 
 installGoLang() {
-    
+    echo -e "${green}-->Status:Installing GoLang...${clear}!"
     echo -e "${green}-->Status:Getting latest go version tar file from web source...${clear}!"
     http_response=$(GET https://go.dev/dl/)
     extracted_response=$(echo "$http_response" | grep -o -P '(?<=class="download downloadBox" href=).*?(?=>)')
@@ -63,7 +84,6 @@ installGoLang() {
     go_version=${go_version_full:5:len-6}
     echo -e "${green}-->Status:Latest golang linux tar file: ${go_version} ...${clear}!"
 
-    ##-------------------------------------------------------------------------------##
     echo -e "${green}-->Status:Removing old go tar files from /usr/local... ${clear}!"
     rm -rf /usr/local/go
     rm -rf /usr/local/go_version
@@ -71,7 +91,6 @@ installGoLang() {
     sleep ${slp}
     echo -e "${green}-->Status:Downloading go version ${go_version}... ${clear}!"
     wget https://dl.google.com/go/${go_version}
-    ##-------------------------------------------------------------------------------##
 
     sleep ${slp}
     mv ${go_version} /usr/local/
@@ -80,8 +99,7 @@ installGoLang() {
     sleep ${slp}
     tar -C /usr/local/ -xzf ${go_version}
     sleep ${slp}
-    ##-------------------------------------------------------------------------------##
-
+    
     #Add the path /usr/local/go/bin to the $PATH environment variable.(profile)
     echo -e "${green}-->Status:EXPORT PATH variable to profile... ${go_version}... ${clear}!"
     sleep ${slp}
@@ -92,29 +110,9 @@ installGoLang() {
     echo -e "${green}-->go version...$(go version) ${clear}!"
 }
 
-installgit() {
-    
-    echo -e "${green}-->Status:install git... ${clear}!"
-    sleep ${slp}
-    apt install git -y
-    git config --global user.name "${git_user_name}"
-    git config --global user.email "${mail}"
-    sleep ${slp}
-
-    #Generating SSH key:
-    ssh-keygen -f "${HOME}/.ssh/id_rsa" -t rsa -b 4096 -C "${mail}" -N ''
-    sslpub="$(cat ${HOME}/.ssh/id_rsa.pub |tail -1)"
-    sleep ${slp}
-    eval `ssh-agent`
-    sleep ${slp}
-    ssh-add ~/.ssh/id_rsa
-    sleep ${slp}
-
-}
-
 installPostgresgl() {
 
-    echo -e "${green}-->Status:installing postgres... ${clear}!"
+    echo -e "${green}-->Status:Installing postgres... ${clear}!"
     sleep ${slp}
     sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
@@ -130,7 +128,7 @@ initialize
 readUserConfigFileParameters
 updatesystem
 installVSCode
-installgit
+installGit
 installGoLang
 installPostgresgl
 processEnd
