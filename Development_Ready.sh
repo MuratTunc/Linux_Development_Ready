@@ -16,10 +16,7 @@ readUserConfigFileParameters() {
     source config.txt
     echo -e "${green}-->Status:User Input Parameters... ${clear}!"
     echo -e "${green}-->Status:mail=$mail ... ${clear}!"
-    echo -e "${green}-->Status:git_user_name=$git_user_name ... ${clear}!"
-    echo -e "${green}-->Status:git_api_token=$git_api_token ... ${clear}!"
-    echo -e "${green}-->Status:git_repo_https=$git_repo_https ... ${clear}!"
-    
+    echo -e "${green}-->Status:git_user_name=$git_user_name ... ${clear}!"    
 }
 
 initialize() {
@@ -41,19 +38,20 @@ updatesystem() {
 
 installVSCode() {
     echo -e "${green}-->Status:Installing VS Code...${clear}!"
-    http_response=$(GET https://packages.microsoft.com/repos/vscode/pool/main/c/code/)
-    latest_line=$(echo ${http_response//*a href=})
-    vslatest_deb_package=$(grep -oP '(?<=>).*?(?=</a)' <<< "$latest_line")
-    echo -e "${green}-->Status:Downloading latest VS CODE DEB PACKAGE $vslatest_deb_package...${clear}!"
-    wget https://packages.microsoft.com/repos/vscode/pool/main/c/code/$vslatest_deb_package
-    sleep ${slp}
+    echo -e "${green}-->Status:Remove current VS Code from machine...${clear}!"
+    apt autoremove code -y
+    rm -rf ~/.vscode ~/.config/Code
     echo -e "${green}-->Status:Installing VS Code...${clear}!"
-    dpkg -i $vslatest_deb_package
-    sleep ${slp}
-    apt-get install -f
-    sleep ${slp}
-    rm -rf $vslatest_deb_package
-
+    echo -e "${green}-->Status:Remove current VS Code from machine...${clear}!"
+    apt autoremove code -y
+    rm -rf ~/.vscode ~/.config/Code
+    echo -e "${green}-->Status:Getting Latest debian package VS Code from repo ...${clear}!"
+    apt install software-properties-common apt-transport-https wget -y
+    wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+    add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" -"\n"
+    apt install code
+    vs_code_version=$(code --version)
+    echo -e "${green}-->Status:Installed VS Code $vs_code_version ...${clear}!"
 }
 
 installGit() {
@@ -65,7 +63,7 @@ installGit() {
     sleep ${slp}
 
     #Generating SSH key
-    ssh-keygen -f "${HOME}/.ssh/id_rsa" -t rsa -b 4096 -C "${mail}" -N ''
+    ssh-keygen -f "${HOME}/.ssh/id_rsa" -t rsa -b 4096 -C "${mail}" -N '' -y
     sslpub="$(cat ${HOME}/.ssh/id_rsa.pub |tail -1)"
     sleep ${slp}
     eval `ssh-agent`
@@ -118,6 +116,9 @@ installPostgresgl() {
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
     sleep ${slp}
     apt-get install postgresql -y
+    export PATH=/usr/lib/postgresql/16/bin:$PATH
+    sleep ${slp}
+    source ~/.profile
 }
 
 processEnd() {
@@ -132,5 +133,3 @@ installGit
 installGoLang
 installPostgresgl
 processEnd
-
-

@@ -1,4 +1,2 @@
-mail=""
-git_user_name=""
-git_api_token="github_pat_..."
-git_repo_https=""
+mail="murat.tunc8558@gmail.com"
+git_user_name="MuratTunc"
