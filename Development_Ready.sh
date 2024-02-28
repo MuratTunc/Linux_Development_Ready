@@ -1,4 +1,15 @@
 #!/bin/bash
+#title           :Development_Ready.sh
+#description     :This script will make ready for sw development for Golang.
+#author          :Murat Tunç- Senior Backend Developer -Türkiye-İstanbul
+#date            :20240228
+#version         :0.1    
+#usage           :sudo ./Development_Ready.sh
+#repository      :https://github.com/MuratTunc/Linux_Development_Ready
+#notes           :Linux bash terminal is needed to use this script.
+#bash_version    :5.1.16(1)-release
+#operating_system:Ubuntu
+#==================================================================================
 
 slp=2 #sleep constant in seconds
 ##-------------------------------------------------------------------------------##
@@ -37,6 +48,7 @@ updatesystem() {
 }
 
 installVSCode() {
+
     echo -e "${green}-->Status:Installing VS Code...${clear}!"
     echo -e "${green}-->Status:Remove current VS Code from machine...${clear}!"
     apt autoremove code -y
@@ -55,6 +67,7 @@ installVSCode() {
 }
 
 installGit() {
+
     echo -e "${green}-->Status:Installing git ... ${clear}!"
     sleep ${slp}
     apt install git -y
@@ -73,6 +86,7 @@ installGit() {
 }
 
 installGoLang() {
+
     echo -e "${green}-->Status:Installing GoLang...${clear}!"
     echo -e "${green}-->Status:Getting latest go version tar file from web source...${clear}!"
     http_response=$(GET https://go.dev/dl/)
@@ -116,9 +130,7 @@ installPostgresgl() {
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
     sleep ${slp}
     apt-get install postgresql -y
-    export PATH=/usr/lib/postgresql/16/bin:$PATH
-    sleep ${slp}
-    source ~/.profile
+    echo -e "${green}-->Status:Installed Postgresql version: $(psql --version) ...${clear}!"
 }
 
 processEnd() {

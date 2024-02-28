@@ -1,2 +1,2 @@
-mail="murat.tunc8558@gmail.com"
-git_user_name="MuratTunc"
+mail="your@mail.com"
+git_user_name="yourGithubUserName"
